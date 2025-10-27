@@ -88,10 +88,24 @@ Distribution Switch **DS-ZONE4** provides local switching and trunk links to MS1
 ---
 
 ## 7. IP Addressing Table
-See full addressing reference below.  
-(The complete IP table can be inserted here.)
 
-[Full IP Addressing Table](#)
+The **Corporate Multi-Zone Network** uses a structured IP addressing plan organized by zones and VLAN functions.  
+Each zone maintains its own management, user, and service subnets, while the DMVPN overlay ensures unified routing across all branches.
+
+### Addressing Summary per Zone
+
+| Zone | Subnet Range | Purpose | Gateway (HSRP VIP) |
+|:--:|:--|:--|:--|
+| **Zone 1 – HQ** | 192.168.5.0/24 – 192.168.20.0/24 | Management, Wi-Fi, IT, Services | 192.168.x.1 |
+| **Zone 2 – Server Farm + DMZ** | 192.168.40.0/24 – 192.168.55.0/24 | DMZ, Servers, Infrastructure, Management | 192.168.x.1 |
+| **Zone 3 – Operations** | 192.168.25.0/24 – 192.168.60.0/24 | Guest, Users, Staff, Management | 192.168.x.1 |
+| **Zone 4 – Finance & Marketing** | 172.16.70.0/24 – 172.16.95.0/24 | Marketing, Finance, Sales, Management | 172.16.x.1 |
+
+All inter-zone communication and site-to-site VPN traffic use the **10.255.x.x** DMVPN overlay network.  
+Each spoke router maintains two tunnel interfaces toward the dual hubs (Hub1 & Hub2).
+
+For the full device-level addressing (routers, switches, firewalls, and servers), refer to:  
+👉 [**Corporate Multi-Zone Network – IP Addressing Table**](./Corporate%20Multi-Zone%20Network%20–%20IP%20Addressing%20Table.md)
 
 ---
 
