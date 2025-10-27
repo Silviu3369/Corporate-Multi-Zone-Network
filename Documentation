@@ -1,4 +1,4 @@
-PROJECT Corporate Multi-Zone Network
+#PROJECT Corporate Multi-Zone Network
 
 Author: Ghimpau Ionel Silviu
 Environment: Cisco Packet Tracer 8.x ( IOS 15.x / ASA 9.6(1) )
@@ -6,7 +6,7 @@ Topology: Dual-Hub DMVPN ( GRE over IPsec AES-256 ) with 4 zones
 Routing: OSPF Area 0 | Redundancy: HSRP
 Security: ASA Firewall + Zone-Based Firewall + ACL + NAT Exempt
 
-1. GENERAL OVERVIEW
+#1. GENERAL OVERVIEW
 
 The Corporate Multi-Zone Network interconnects four enterprise zones through a secure, redundant dual-hub architecture based on DMVPN over IPsec.
 Each zone is logically segmented using dedicated VLANs, redundant Layer-3 gateways (HSRP), and centralized security mechanisms implemented with ASA firewalls and Zone-Based Firewall (ZBF) policies.
@@ -23,13 +23,13 @@ Scalable segmentation, allowing future zones or departments to be integrated eas
 
 In summary, the Corporate Multi-Zone Network ensures a unified, secure, and resilient enterprise connectivity model that supports centralized services, remote branches, and secure DMZ hosting within a single managed infrastructure.
 
-2 ZONE 1 – HQ (SPOKE 1)
-2.1 Role
+#2 ZONE 1 – HQ (SPOKE 1)
+**2.1 Role**
 
 Zone 1 acts as the Headquarters branch. It hosts local staff and IT operations and provides secure DMVPN access to the Server Farm (Zone 2).
 This zone is a spoke in the DMVPN overlay with redundant connectivity to both Hubs.
 
-2.2 Logical Design
+**2.2 Logical Design**
 
 Core Routing: OSPF Area 0 (passive on VLANs)
 
@@ -41,7 +41,7 @@ NAT Boundary: EDGE-ZONE1 toward ISP
 
 DHCP Relay Target: 192.168.40.5 (in Zone 2 DMZ)
 
-2.3 Addressing Scheme
+**2.3 Addressing Scheme**
 VLAN	Name	Subnet	HSRP VIP	MS1	MS2	DS (SVI)	Purpose
 5	SSH-MGMT	192.168.5.0/24	192.168.5.1	.2	.3	192.168.5.4	Infrastructure management
 10	SERVICES	192.168.10.0/24	192.168.10.1	.2	.3	192.168.10.4	Internal services
@@ -57,7 +57,7 @@ DMVPN Tunnels
 Tunnel 10 – 10.255.0.2 ↔ Hub1 (10.255.0.1)
 Tunnel 20 – 10.255.1.2 ↔ Hub2 (10.255.1.1)
 
-2.4 Devices
+**2.4 Devices**
 Core Switches (MS1/MS2)
 
 Provide inter-VLAN routing and HSRP redundancy. MS1 is the primary gateway (preempt 110), MS2 backup (100).
@@ -74,7 +74,7 @@ Edge Router (EDGE-ZONE1)
 Performs DMVPN spoke tunnels, NAT to ISP, and route redistribution.
 Manages GRE over IPsec tunnels to both hubs and maintains OSPF adjacency with MS1/MS2.
 
-2.5 Operational Notes
+**2.5 Operational Notes**
 
 Management access restricted to 192.168.5.0/24.
 
@@ -84,13 +84,13 @@ OSPF neighbors on 10.0.1.x and tunnel interfaces.
 
 NAT Exempt configured for VPN subnets.
 
-3 ZONE 2 – SERVER FARM + DMZ (HUB 1 & HUB 2)
-3.1 Role
+#3 ZONE 2 – SERVER FARM + DMZ (HUB 1 & HUB 2)
+**3.1 Role**
 
-Zone 2 is the core of Project Blaze, acting as both Hub 1 and Hub 2 for DMVPN.
+Zone 2 is the core of Project, acting as both Hub 1 and Hub 2 for DMVPN.
 It hosts all enterprise servers and security perimeter through two ASA firewalls.
 
-3.2 Logical Design
+**3.2 Logical Design**
 
 Dual Edge Routers: EDGE1-ZONE2 (Hub 1), EDGE2-ZONE2 (Hub 2).
 
@@ -102,7 +102,7 @@ Inter-HUB link 10.2.2.0/30 for redundancy.
 
 OSPF backbone interconnects all zones through DMVPN.
 
-3.3 Addressing Scheme
+**3.3 Addressing Scheme**
 VLAN	Name	Subnet	HSRP VIP	MS1	MS2	DS (SVI)	Purpose
 40	DMZ	192.168.40.0/24	192.168.40.1	.2	.3	192.168.40.4	Public servers
 45	SERVERS	192.168.45.0/24	192.168.45.1	.2	.3	192.168.45.4	AD/File servers
@@ -117,7 +117,7 @@ Inter-Device Links: ASA1↔EDGE1 10.1.1.8/30, ASA2↔EDGE2 10.1.1.12/30, MS1↔M
 
 DMVPN Hub Tunnels – 10.255.0.1 (Hub1), 10.255.1.1 (Hub2) to all spokes.
 
-3.4 Devices
+**3.4 Devices**
 
 MS1/MS2-ZONE2: Core switch pair with HSRP and OSPF backbone.
 
@@ -127,7 +127,7 @@ ASA1/ASA2: Perimeter firewalls (security-levels 100 inside, 0 outside, NAT and i
 
 DS-ZONE2: Layer-2 distribution for servers and infrastructure management.
 
-3.5 Operational Notes
+**3.5 Operational Notes**
 
 All zones use DHCP Relay to 192.168.40.5 (except Zone 4).
 
@@ -137,12 +137,12 @@ SYSLOG and NTP sourced from 192.168.50.6/7.
 
 HSRP VIPs used as default gateway for all server segments.
 
-4 ZONE 3 – OPERATIONS (SPOKE 2)
-4.1 Role
+#4 ZONE 3 – OPERATIONS (SPOKE 2)
+**4.1 Role**
 
 Remote branch for operations and production teams. Provides segmented access for guests, users, and internal staff.
 
-4.2 Addressing Scheme
+**4.2 Addressing Scheme**
 VLAN	Name	Subnet	HSRP VIP	MS1	MS2	DS (SVI)	Purpose
 25	GUEST	192.168.25.0/24	192.168.25.1	.2	.3	192.168.25.4	Guest network
 30	USERS	192.168.30.0/24	192.168.30.1	.2	.3	192.168.30.4	Employees
@@ -156,7 +156,7 @@ DMVPN: 10.255.0.6 ↔ Hub1 10.255.0.5; 10.255.1.6 ↔ Hub2 10.255.1.5
 
 DS-ZONE3: Access switch for operational segments, trunks to MS1/MS2.
 
-4.3 Operational Notes
+**4.3 Operational Notes**
 
 DHCP Relay to 192.168.40.5.
 
@@ -164,170 +164,13 @@ Management restricted to 192.168.60.0/24.
 
 Internet access via EDGE-ZONE3 NAT.
 
-5 ZONE 4 – FINANCE & MARKETING (SPOKE 3)
-5.1 Role
+#5 ZONE 4 – FINANCE & MARKETING (SPOKE 3)
+**5.1 Role**
 
 Hosts Finance, Sales and Marketing departments. Independent branch with local DHCP services and redundant DMVPN tunnels.
 
-5.2 Addressing Scheme
-VLAN	Name	Subnet	HSRP VIP	MS1	MS2	DS (SVI)	Purpose
-70	MARKETING	172.16.70.0/24	172.16.70.1	.2	.3	172.16.70.4	Marketing
-80	FINANCE	172.16.80.0/24	172.16.80.1	.2	.3	172.16.80.4	Finance
-90	SALES	172.16.90.0/24	172.16.90.1	.2	.3	172.16.90.4	Sales
-95	SSH-MGMT	172.16.95.0/24	172.16.95.1	.2	.3	172.16.95.4	Management
-99	NATIVE	–	–	–	–	–	Trunk native
-999	PARKING	–	–	–	–	–	Disabled
+**5.2 Addressing Scheme**
 
-Inter-Device Links: 
-MS1↔EDGE 10.2.1.0/30, 
-MS2↔EDGE 10.2.1.4/30, EDGE↔ISP 198.51.100.8/30
-DMVPN: 10.255.0.10 2 ZONE 1 – HQ (SPOKE 1)
-2.1 Role
-
-Zone 1 acts as the Headquarters branch. It hosts local staff and IT operations and provides secure DMVPN access to the Server Farm (Zone 2).
-This zone is a spoke in the DMVPN overlay with redundant connectivity to both Hubs.
-
-2.2 Logical Design
-
-Core Routing: OSPF Area 0 (passive on VLANs)
-
-VPN Connectivity: Dual Hub DMVPN over IPsec (AES-256)
-
-Default Gateway: HSRP VIP on each VLAN (.1)
-
-NAT Boundary: EDGE-ZONE1 toward ISP
-
-DHCP Relay Target: 192.168.40.5 (in Zone 2 DMZ)
-
-2.3 Addressing Scheme
-VLAN	Name	Subnet	HSRP VIP	MS1	MS2	DS (SVI)	Purpose
-5	SSH-MGMT	192.168.5.0/24	192.168.5.1	.2	.3	192.168.5.4	Infrastructure management
-10	SERVICES	192.168.10.0/24	192.168.10.1	.2	.3	192.168.10.4	Internal services
-15	WIFI	192.168.15.0/24	192.168.15.1	.2	.3	192.168.15.4	Wireless clients
-20	IT	192.168.20.0/24	192.168.20.1	.2	.3	192.168.20.4	IT department
-99	NATIVE	–	–	–	–	–	Trunk native
-999	PARKING	–	–	–	–	–	Disabled ports
-
-Inter-Device /30 Links
-MS1↔EDGE 10.0.1.0/30 MS2↔EDGE 10.0.1.4/30 EDGE↔ISP 203.0.113.0/30
-
-DMVPN Tunnels
-Tunnel 10 – 10.255.0.2 ↔ Hub1 (10.255.0.1)
-Tunnel 20 – 10.255.1.2 ↔ Hub2 (10.255.1.1)
-
-2.4 Devices
-Core Switches (MS1/MS2)
-
-Provide inter-VLAN routing and HSRP redundancy. MS1 is the primary gateway (preempt 110), MS2 backup (100).
-Both run OSPF Area 0 and announce local networks to EDGE-ZONE1.
-
-Distribution Switch (DS-ZONE1)
-
-Layer-2 access switch serving all HQ VLANs.
-Trunk ports Gi0/1-2 to MS1/MS2 (802.1Q, native VLAN 99).
-All unused interfaces assigned to VLAN 999 and shutdown for security.
-
-Edge Router (EDGE-ZONE1)
-
-Performs DMVPN spoke tunnels, NAT to ISP, and route redistribution.
-Manages GRE over IPsec tunnels to both hubs and maintains OSPF adjacency with MS1/MS2.
-
-2.5 Operational Notes
-
-Management access restricted to 192.168.5.0/24.
-
-DHCP relayed to 192.168.40.5 in Zone 2.
-
-OSPF neighbors on 10.0.1.x and tunnel interfaces.
-
-NAT Exempt configured for VPN subnets.
-
-3 ZONE 2 – SERVER FARM + DMZ (HUB 1 & HUB 2)
-3.1 Role
-
-Zone 2 is the core of Project Blaze, acting as both Hub 1 and Hub 2 for DMVPN.
-It hosts all enterprise servers and security perimeter through two ASA firewalls.
-
-3.2 Logical Design
-
-Dual Edge Routers: EDGE1-ZONE2 (Hub 1), EDGE2-ZONE2 (Hub 2).
-
-ASA1/ASA2 form the inside/outside perimeter.
-
-Centralized services (DHCP, DNS, AD, File, NTP, SYSLOG).
-
-Inter-HUB link 10.2.2.0/30 for redundancy.
-
-OSPF backbone interconnects all zones through DMVPN.
-
-3.3 Addressing Scheme
-VLAN	Name	Subnet	HSRP VIP	MS1	MS2	DS (SVI)	Purpose
-40	DMZ	192.168.40.0/24	192.168.40.1	.2	.3	192.168.40.4	Public servers
-45	SERVERS	192.168.45.0/24	192.168.45.1	.2	.3	192.168.45.4	AD/File servers
-50	INFRA-MGMT	192.168.50.0/24	192.168.50.1	.2	.3	192.168.50.4	NTP/SYSLOG
-55	SSH-MGMT	192.168.55.0/24	192.168.55.1	.2	.3	192.168.55.4	Device management
-99	NATIVE	–	–	–	–	–	Trunk native
-999	PARKING	–	–	–	–	–	Disabled ports
-
-Core Servers: DHCP .5 | DNS .6 | WEB .7 | DC1 .6 | File .7 | DC2 .8 | NTP .6 | SYSLOG .7
-
-Inter-Device Links: ASA1↔EDGE1 10.1.1.8/30, ASA2↔EDGE2 10.1.1.12/30, MS1↔MS2 10.1.2.0/30, EDGE1↔EDGE2 10.2.2.0/30
-
-DMVPN Hub Tunnels – 10.255.0.1 (Hub1), 10.255.1.1 (Hub2) to all spokes.
-
-3.4 Devices
-
-MS1/MS2-ZONE2: Core switch pair with HSRP and OSPF backbone.
-
-EDGE1/EDGE2-ZONE2: Dual Hub DMVPN routers with IPsec encryption (AES-256).
-
-ASA1/ASA2: Perimeter firewalls (security-levels 100 inside, 0 outside, NAT and inspection enabled).
-
-DS-ZONE2: Layer-2 distribution for servers and infrastructure management.
-
-3.5 Operational Notes
-
-All zones use DHCP Relay to 192.168.40.5 (except Zone 4).
-
-NAT Exempt applied for LAN ↔ DMVPN traffic.
-
-SYSLOG and NTP sourced from 192.168.50.6/7.
-
-HSRP VIPs used as default gateway for all server segments.
-
-4 ZONE 3 – OPERATIONS (SPOKE 2)
-4.1 Role
-
-Remote branch for operations and production teams. Provides segmented access for guests, users, and internal staff.
-
-4.2 Addressing Scheme
-VLAN	Name	Subnet	HSRP VIP	MS1	MS2	DS (SVI)	Purpose
-25	GUEST	192.168.25.0/24	192.168.25.1	.2	.3	192.168.25.4	Guest network
-30	USERS	192.168.30.0/24	192.168.30.1	.2	.3	192.168.30.4	Employees
-35	STAFF	192.168.35.0/24	192.168.35.1	.2	.3	192.168.35.4	Internal staff
-60	SSH-MGMT	192.168.60.0/24	192.168.60.1	.2	.3	192.168.60.4	Management
-99	NATIVE	–	–	–	–	–	Trunk native
-999	PARKING	–	–	–	–	–	Disabled
-
-Inter-Device Links: MS1↔EDGE 10.1.3.0/30, MS2↔EDGE 10.1.3.4/30, EDGE↔ISP 203.0.113.8/30
-DMVPN: 10.255.0.6 ↔ Hub1 10.255.0.5; 10.255.1.6 ↔ Hub2 10.255.1.5
-
-DS-ZONE3: Access switch for operational segments, trunks to MS1/MS2.
-
-4.3 Operational Notes
-
-DHCP Relay to 192.168.40.5.
-
-Management restricted to 192.168.60.0/24.
-
-Internet access via EDGE-ZONE3 NAT.
-
-5 ZONE 4 – FINANCE & MARKETING (SPOKE 3)
-5.1 Role
-
-Hosts Finance, Sales and Marketing departments. Independent branch with local DHCP services and redundant DMVPN tunnels.
-
-5.2 Addressing Scheme
 VLAN	Name	Subnet	HSRP VIP	MS1	MS2	DS (SVI)	Purpose
 70	MARKETING	172.16.70.0/24	172.16.70.1	.2	.3	172.16.70.4	Marketing
 80	FINANCE	172.16.80.0/24	172.16.80.1	.2	.3	172.16.80.4	Finance
@@ -342,8 +185,8 @@ Local DHCP: 192.168.95.7
 
 DS-ZONE4: Access switch for marketing and finance segments, trunks to MS1/MS2.
 
-6 CORE SERVICES AND SECURITY
-6.1 DMVPN / IPsec
+#6 CORE SERVICES AND SECURITY
+**6.1 DMVPN / IPsec**
 
 Phase 2 dual-hub topology, AES-256 encryption, SHA-1 auth, DH Group 2.
 
@@ -354,16 +197,7 @@ Local DHCP: 192.168.95.7
 
 DS-ZONE4: Access switch for marketing and finance segments, trunks to MS1/MS2.
 
-6 CORE SERVICES AND SECURITY
-6.1 DMVPN / IPsec
-
-Phase 2 dual-hub topology, AES-256 encryption, SHA-1 auth, DH Group 2.
-
-NHRP configured for dynamic mapping.
-
-Split-tunnel policy prevents hair-pinning.
-
-6.2 Routing (OSPF Backbone)
+**6.2 Routing (OSPF Backbone)**
 
 Single Area 0 for all zones.
 
@@ -371,16 +205,16 @@ Passive on VLANs; active on /30 links and tunnels.
 
 Dynamic route exchange between spokes via hubs.
 
-6.3 Security Architecture
+**6.3 Security Architecture**
 
 The Project Blaze network follows Cisco’s Defense-in-Depth principle.
 Each network layer (edge, core, access) applies distinct protection mechanisms for isolation, filtering, and inspection.
 
-6.3.1 Perimeter Security (ASA Firewalls)
+**6.3.1 Perimeter Security (ASA Firewalls)**
 
 Two ASA firewalls — ASA1 (Hub1 perimeter) and ASA2 (Hub2 perimeter) — secure ingress and egress traffic from the Server Farm (Zone 2).
 
-Main Roles:
+#Main Roles:
 
 Control inbound/outbound traffic between DMZ (192.168.40.0/24) and outside networks.
 
@@ -392,14 +226,14 @@ Enforce ACL policies and inspection rules for HTTP, SSH, and DNS.
 
 Maintain security levels (100 inside → 0 outside) to define trust boundaries.
 
-Logging & Monitoring:
+**Logging & Monitoring:**
 All ASA logs are exported to the central SYSLOG server (192.168.50.7) and timestamps are synchronized with NTP (192.168.50.6).
 
-6.3.2 Internal Segmentation (ZBF on Edge Routers)
+**6.3.2 Internal Segmentation (ZBF on Edge Routers)**
 
 Each Edge router implements a Zone-Based Firewall (ZBF) to segment internal, VPN, management, and external traffic.
 
-Security zones used across all Edges:
+**Security zones used across all Edges:**
 
 Zone	Function	Typical Interfaces
 INTERNAL	LAN + VLANs traffic	Gi0/0 (SVI to MS switches)
@@ -407,7 +241,7 @@ VPN	Encrypted DMVPN tunnels	Tunnel10 / Tunnel20
 MGMT	SSH / NTP / SYSLOG VLANs	VLAN 5 / 55 / 60 / 95
 OUTSIDE	WAN links toward ISP	Serial interfaces
 
-Policies applied:
+**Policies applied:**
 
 ALLOW-INTERNAL: permits internal routing and management between VLANs.
 
@@ -419,7 +253,7 @@ DEFAULT-DROP: all other inter-zone traffic denied by default.
 
 This structure enforces east-west segmentation while keeping full control of DMVPN tunnels and management flows.
 
-6.3.3 Access Control Lists (ACLs)
+**6.3.3 Access Control Lists (ACLs)**
 
 Standardized ACL framework across all zones:
 
@@ -431,11 +265,11 @@ ZBF-POLICY	Define inspection classes	Edges (policy-map)
 
 All ACLs are synchronized with centralized documentation and version-controlled during network maintenance.
 
-6.4 Network Address Translation (NAT)
+**6.4 Network Address Translation (NAT)**
 
 NAT is implemented exclusively at the Edge routers and ASA firewalls.
 
-Key principles:
+**Key principles:**
 
 NAT Overload (PAT): for Internet access via ISP interfaces.
 
@@ -445,8 +279,8 @@ Static NAT: for public DMZ services (e.g., Web 192.168.40.7 → public IP).
 
 ASA NAT Table: unified for both Hub1/HUB2 to maintain consistency.
 
-6.5 Management Infrastructure
-6.5.1 NTP
+**6.5 Management Infrastructure**
+**6.5.1 NTP**
 
 Master: 192.168.50.6 (Zone 2 INFRA-MGMT VLAN 50).
 
@@ -454,7 +288,7 @@ All routers, switches, and ASA synchronize to this source.
 
 Time accuracy ensures reliable log correlation and crypto validity.
 
-6.5.2 SYSLOG
+**6.5.2 SYSLOG**
 
 Central server: 192.168.50.7 (Zone 2).
 
@@ -462,7 +296,7 @@ All routers and ASA send informational and warning logs.
 
 Supports event correlation for DMVPN, HSRP, and ACL monitoring.
 
-6.5.3 SSH Management
+**6.5.3 SSH Management**
 
 Enabled only on dedicated MGMT VLANs (.5, .55, .60, .95).
 
@@ -470,13 +304,13 @@ Login access restricted by SSH-MGMT ACL.
 
 Passwords and secrets are encrypted; SSH v2 mandatory.
 
-6.5.4 DHCP & DNS
+**6.5.4 DHCP & DNS**
 
 DHCP centralized in Zone 2 (192.168.40.5).
 
 DNS (192.168.40.6) resolves all internal hostnames; external DNS restricted.
 
-6.6 Routing Backbone (OSPF Area 0)
+**.6 Routing Backbone (OSPF Area 0)**
 
 A single-area OSPF design interconnects all hubs and spokes.
 All VLAN interfaces are passive; only tunnel and /30 links form adjacencies.
@@ -486,8 +320,9 @@ HUB1 (EDGE1-ZONE2) & HUB2 (EDGE2-ZONE2)	DR / BDR for DMVPN area
 SPOKES (Z1, Z3, Z4)	Non-broadcast neighbors via tunnels
 ASA firewalls	Participate as passive interfaces (logging only)
 Convergence	~ 3 seconds (fast hellos + priority tuning)
-7 OPERATIONAL VERIFICATION & MONITORING
-7.1 Network Health Checks
+
+**7 OPERATIONAL VERIFICATION & MONITORING**
+**7.1 Network Health Checks**
 
 Periodic verification is part of standard operating procedure:
 
@@ -499,7 +334,8 @@ HSRP	Active/Standby state	MS1 active, MS2 standby
 NAT	Translation table	Dynamic entries visible
 ASA	Connection table	Established sessions
 SYSLOG/NTP	Log time accuracy	≤ 1 sec drift
-7.2 Security Validation
+
+**7.2 Security Validation**
 
 ACL audits: verify SSH-MGMT, OUTSIDE-IN, NAT-EXEMPT consistency.
 
@@ -507,7 +343,7 @@ ASA inspections: ensure HTTP and DNS sessions are logged.
 
 ZBF state checks: monitor session counts per zone-pair.
 
-7.3 Monitoring Tools
+**7.3 Monitoring Tools**
 
 Syslog analyzer for event aggregation.
 
@@ -515,7 +351,8 @@ SNMP polling for interface statistics and HSRP status.
 
 Packet Tracer simulation tests for DMVPN redundancy validation.
 
-8 BEST PRACTICES & DESIGN COMPLIANCE
+**8 BEST PRACTICES & DESIGN COMPLIANCE**
+
 Category	Recommendation
 Redundancy	Maintain dual hubs and dual MS switches per zone.
 Segmentation	Keep management, user, and DMZ networks isolated by VLAN.
@@ -523,15 +360,16 @@ Security	Apply principle of least privilege; enforce ACL versioning.
 Documentation	Update IP tables and ACL versions after each change.
 Backup	Store daily configs on SYSLOG/NTP server in Zone 2.
 Monitoring	Implement SNMP traps for DMVPN and HSRP events.
-9 GLOBAL SUMMARY
+**9 GLOBAL SUMMARY**
 Zone	Function	Subnets	Management VLAN	DHCP Source	NAT Boundary
 1	Headquarters	192.168.5.0 – 20.0	VLAN 5	192.168.40.5	EDGE-Z1
 2	Server Farm + DMZ (Hubs)	192.168.40.0 – 55.0	VLAN 55	Local	ASA / EDGE1 / EDGE2
 3	Operations Branch	192.168.25.0 – 60.0	VLAN 60	192.168.40.5	EDGE-Z3
 4	Finance & Marketing	172.16.70.0 – 95.0	VLAN 95	Local (192.168.95.7)	EDGE-Z4
-10 CONCLUSION
 
-Project Blaze delivers a secure, scalable, and redundant enterprise WAN architecture.
+**10 CONCLUSION**
+
+Project Corporate Multi-Zone Network delivers a secure, scalable, and redundant enterprise WAN architecture.
 Through its dual-hub DMVPN design, full HSRP redundancy, centralized services, and layered security (ASA + ZBF + ACL), the infrastructure provides:
 
 High Availability through dual routers and switches.
