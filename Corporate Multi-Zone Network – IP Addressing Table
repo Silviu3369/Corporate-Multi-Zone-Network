@@ -1,0 +1,66 @@
+| Zone | Device | VLAN / Link | Interface / Description | IP Address | Purpose |
+|:----:|:--------|:-------------|:-------------------------|:-------------|:-----------|
+| **Zone 1 – HQ (Spoke 1)** | MS1-ZONE1 | VLAN 5 | SSH-MGMT | 192.168.5.2 | Management gateway |
+| | MS2-ZONE1 | VLAN 5 | SSH-MGMT | 192.168.5.3 | Redundant gateway |
+| | DS-ZONE1 | VLAN 5 | SVI | 192.168.5.4 | Switch management |
+| | MS1-ZONE1 | VLAN 10 | SERVICES | 192.168.10.2 | Internal services |
+| | DS-ZONE1 | VLAN 10 | SVI | 192.168.10.4 | Services switch IP |
+| | MS1-ZONE1 | VLAN 15 | WIFI | 192.168.15.2 | Wireless network |
+| | DS-ZONE1 | VLAN 15 | SVI | 192.168.15.4 | Wi-Fi switch IP |
+| | MS1-ZONE1 | VLAN 20 | IT | 192.168.20.2 | IT Department |
+| | DS-ZONE1 | VLAN 20 | SVI | 192.168.20.4 | IT switch IP |
+| | EDGE-ZONE1 | Tunnel10 | DMVPN → HUB1 | 10.255.0.2 | Primary tunnel |
+| | EDGE-ZONE1 | Tunnel20 | DMVPN → HUB2 | 10.255.1.2 | Secondary tunnel |
+| | EDGE-ZONE1 | Serial0/1/0 | ISP Link | 203.0.113.2 | Internet uplink |
+| | | | | | |
+| **Zone 2 – Server Farm + DMZ (Hub 1 & Hub 2)** | MS1-ZONE2 | VLAN 40 | DMZ | 192.168.40.2 | DMZ gateway |
+| | MS2-ZONE2 | VLAN 40 | DMZ | 192.168.40.3 | Backup gateway |
+| | DS-ZONE2 | VLAN 40 | SVI | 192.168.40.4 | Switch DMZ IP |
+| | MS1-ZONE2 | VLAN 45 | SERVERS | 192.168.45.2 | Core servers gateway |
+| | DS-ZONE2 | VLAN 45 | SVI | 192.168.45.4 | Servers switch IP |
+| | MS1-ZONE2 | VLAN 50 | INFRA-MGMT | 192.168.50.2 | NTP/SYSLOG VLAN |
+| | DS-ZONE2 | VLAN 50 | SVI | 192.168.50.4 | Infra switch IP |
+| | MS1-ZONE2 | VLAN 55 | SSH-MGMT | 192.168.55.2 | Management VLAN |
+| | DS-ZONE2 | VLAN 55 | SVI | 192.168.55.4 | Switch mgmt IP |
+| | ASA1 | Outside | to EDGE1-Z2 | 10.1.1.9 | Public edge |
+| | ASA1 | Inside | to MS1-Z2 | 10.1.1.2 | Inside firewall |
+| | ASA2 | Outside | to EDGE2-Z2 | 10.1.1.13 | Public edge |
+| | ASA2 | Inside | to MS2-Z2 | 10.1.1.6 | Inside firewall |
+| | EDGE1-ZONE2 | WAN | ISP Link | 203.0.113.5 | Hub1 WAN |
+| | EDGE2-ZONE2 | WAN | ISP Link | 203.0.113.13 | Hub2 WAN |
+| | EDGE1-ZONE2 | Tunnel | DMVPN Hub1 | 10.255.0.1 | DMVPN hub primary |
+| | EDGE2-ZONE2 | Tunnel | DMVPN Hub2 | 10.255.1.1 | DMVPN hub secondary |
+| | | | | | |
+| **Core Servers (Zone 2)** | DHCP | VLAN 40 |  | 192.168.40.5 | DHCP Server |
+| | DNS | VLAN 40 |  | 192.168.40.6 | DNS Server |
+| | WEB | VLAN 40 |  | 192.168.40.7 | Web Server |
+| | DC1 | VLAN 45 |  | 192.168.45.6 | Domain Controller |
+| | FILE | VLAN 45 |  | 192.168.45.7 | File Server |
+| | DC2 | VLAN 45 |  | 192.168.45.8 | AD Replica |
+| | NTP | VLAN 50 |  | 192.168.50.6 | NTP Server |
+| | SYSLOG | VLAN 50 |  | 192.168.50.7 | SYSLOG Server |
+| | | | | | |
+| **Zone 3 – Operations (Spoke 2)** | MS1-ZONE3 | VLAN 25 | GUEST | 192.168.25.2 | Guest gateway |
+| | DS-ZONE3 | VLAN 25 | SVI | 192.168.25.4 | Guest switch IP |
+| | MS1-ZONE3 | VLAN 30 | USERS | 192.168.30.2 | Employee VLAN |
+| | DS-ZONE3 | VLAN 30 | SVI | 192.168.30.4 | Users switch IP |
+| | MS1-ZONE3 | VLAN 35 | STAFF | 192.168.35.2 | Staff VLAN |
+| | DS-ZONE3 | VLAN 35 | SVI | 192.168.35.4 | Staff switch IP |
+| | MS1-ZONE3 | VLAN 60 | SSH-MGMT | 192.168.60.2 | Management VLAN |
+| | DS-ZONE3 | VLAN 60 | SVI | 192.168.60.4 | Switch mgmt IP |
+| | EDGE-ZONE3 | Tunnel11 | DMVPN → HUB1 | 10.255.0.6 | Primary tunnel |
+| | EDGE-ZONE3 | Tunnel21 | DMVPN → HUB2 | 10.255.1.6 | Secondary tunnel |
+| | EDGE-ZONE3 | Serial | ISP Link | 203.0.113.10 | Internet uplink |
+| | | | | | |
+| **Zone 4 – Finance & Marketing (Spoke 3)** | MS1-ZONE4 | VLAN 70 | MARKETING | 172.16.70.2 | Marketing VLAN |
+| | DS-ZONE4 | VLAN 70 | SVI | 172.16.70.4 | Marketing switch IP |
+| | MS1-ZONE4 | VLAN 80 | FINANCE | 172.16.80.2 | Finance VLAN |
+| | DS-ZONE4 | VLAN 80 | SVI | 172.16.80.4 | Finance switch IP |
+| | MS1-ZONE4 | VLAN 90 | SALES | 172.16.90.2 | Sales VLAN |
+| | DS-ZONE4 | VLAN 90 | SVI | 172.16.90.4 | Sales switch IP |
+| | MS1-ZONE4 | VLAN 95 | SSH-MGMT | 172.16.95.2 | Management VLAN |
+| | DS-ZONE4 | VLAN 95 | SVI | 172.16.95.4 | Switch mgmt IP |
+| | EDGE-ZONE4 | Tunnel12 | DMVPN → HUB1 | 10.255.0.10 | Primary tunnel |
+| | EDGE-ZONE4 | Tunnel22 | DMVPN → HUB2 | 10.255.1.10 | Secondary tunnel |
+| | EDGE-ZONE4 | Serial | ISP Link | 198.51.100.10 | Internet uplink |
+| | Local DHCP | VLAN 95 |  | 192.168.95.7 | Local DHCP server |
